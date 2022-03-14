@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <a href="/home">student</a>
+    <a href="/khoa">khoa</a>
+    <a href="/subject">subject</a>
+    <form action="/editstudent/<%= data.id %>?_method=PUT" method="POST">
+        <input type="text" name="name" value="<%= data.lastName %>">
+        <input type="text" name="email" value="<%= data.email %>">
+        <% for(let i=0; i<data.Subjects.length; i++) {%>
+        <input type="text" name="nameS" value="<%= data.Subjects[i].nameS %>">
+        <input type="text" name="sotc" value="<%= data.Subjects[i].sotc %>">
+        <%}%>
+        <input type="text" name="nameK" value="<%= data.Khoa.nameKhoa %>">
+
+        <button>gui</button>
+    </form>
+</body>
+</html>

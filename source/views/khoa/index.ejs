@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <a href="/home">student</a>
+    <a href="/khoa">khoa</a>
+    <a href="/subject">subject</a>
+    <% for(let i in khoas) { %>
+        <p> khoa:<%= khoas[i].nameKhoa %></p> 
+       
+  
+        <% for(let j=0; j<khoas[i].Students.length;j++){ %>
+        <p><%= khoas[i].Students[j].lastName %></p>
+        <p><%= khoas[i].Students[j].sotc %></p>
+        <%}%>
+        <a href="edit/khoa/<%= khoas[i].id %>">edit</a>
+        <!-- <form action="/delete/khoa/<%= khoas[i].id %>?_method=DELETE" method="POST">
+            <button>delete</button>
+        </form> -->
+
+    <%}%>
+<a href="createkhoa">createkhoa</a> 
+</body>
+</html>

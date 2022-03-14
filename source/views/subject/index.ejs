@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <a href="/home">student</a>
+    <a href="/khoa">khoa</a>
+    <a href="/subject">subject</a>
+    <% for(let i in subjects) { %>
+        <p> ten mon hoc:<%= subjects[i].nameS %></p>
+        <a href="edit/subject/<%= subjects[i].id %>">edit</a>
+        <% for(let j=0; j<subjects[i].Students.length;j++){ %>
+        <p>student:<%= subjects[i].Students[j].lastName %></p>
+       
+        <%}%>
+    <%}%>
+    <a href="createsubject">createsubject</a>
+</body>
+</html>

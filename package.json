@@ -1,0 +1,34 @@
+{
+  "name": "abc",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon source/index",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "haianhle <khoaianh01@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "dot-env": "^0.0.1",
+    "dotenv": "^16.0.0",
+    "ejs-mate": "^3.0.0",
+    "express": "^4.17.3",
+    "method-override": "^3.0.0",
+    "mysql2": "^2.3.3",
+    "node": "^17.5.0",
+    "nodemon": "^2.0.15",
+    "package.json": "^2.0.1",
+    "sequelize": "^6.17.0",
+    "sequelize-cli": "^6.4.1",
+    "sqlite3": "^5.0.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/haianh-team/qlsv-mysql.git"
+  },
+  "bugs": {
+    "url": "https://github.com/haianh-team/qlsv-mysql/issues"
+  },
+  "homepage": "https://github.com/haianh-team/qlsv-mysql#readme",
+  "description": ""
+}
