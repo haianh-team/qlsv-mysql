@@ -80,7 +80,7 @@ app.use('/',findRoute);
 // main()
 // `SELECT StudentId,Subjects.nameS from StudentSubjects,Subjects
 //  Where StudentSubjects.StudentId =  Subjects.id AND Subjects.nameS = 'toán'
-
+//
 
 app.listen('4000',(req,res)=>{
     console.log('ok')
