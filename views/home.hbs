@@ -1,9 +1,9 @@
-{{!-- {{#if removedUser}}
+ {{#if removedUser}}
 <div class="alert alert-success alert-dismissible fade show" role="alert">
   User has been removed.
   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
-{{/if}} --}}
+{{/if}} 
 
 <div class="row">
   <div class="col-6">
@@ -36,9 +36,13 @@
       <td id="a{{this.id}}">{{this.email}}</td>
       <td id="a{{this.id}}">{{this.phone}}</td>
       <td class="text-end">
-      <button  type="button"class="btn btn-primary" data-toggle="modal" data-target="#myModal" onclick="Edit({{this.id}})"> edit </button>
-      <button type="button" class="btn btn-primary" onclick="updateUser({{this.id}})">updateUser</button>
-        <button  type="button" class="btn btn-light btn-small" onclick="deleteUser({{this.id}})"><i class="bi bi-person-x"></i> Delete</button>
+  
+      <button  type="button"class="btn btn-primary" data-toggle="modal" data-target="#myModal" onclick="onEdit({{this.id}})"> edit </button>
+      <form action="/delete/{{this.id}}?_method=DELETE" method="POST">
+       <button type="submit" class="btn btn-light btn-small">delete</button>
+   </form>
+   
+        
       </td>
     </tr>
     {{/each}}
@@ -56,23 +60,23 @@
         </button>
       </div>
       <div class="modal-body">
-        {{!-- action="/edit/{{this.id}}_?method=PUT" method="POST" --}}
-       {{!-- <form > --}}
+        
+ 
  <div class="form-group">số thứ tự của hs: <p id="idHs"></p></div>
   <div class="form-group">
     <label for="exampleInputEmail1">First name</label>
     <input type="text" class="form-control"  id="first_name" aria-describedby="emailHelp" value="" placeholder="First name">
-    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+    <small id="emailHelp" class="form-text text-muted">Well never share your email with anyone else.</small>
   </div>
    <div class="form-group">
     <label for="exampleInputEmail1">last name</label>
     <input type="text" class="form-control" id="last_name" aria-describedby="emailHelp" value="" placeholder="last name">
-    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+    <small id="emailHelp" class="form-text text-muted">Well never share your email with anyone else.</small>
   </div>
   <div class="form-group">
     <label for="exampleInputEmail1">Email</label>
-    <input type="email" class="form-control" id="email" aria-describedby="emailHelp" value="" placeholder="Enter email">
-    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+    <input type="email" class="form-control"  id="email" aria-describedby="emailHelp" value="" placeholder="Enter email">
+    <small id="emailHelp" class="form-text text-muted">Well never share your email with anyone else.</small>
   </div>
   <div class="form-group">
     <label for="exampleInputPassword1">Phone</label>
@@ -81,11 +85,11 @@
 
 <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onclick="saveChanges()">Save changes</button>
+        <button type="submit" class="btn btn-primary" data-dismiss="modal" onclick="saveChanges()" >Save changes</button>
         
       </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
-{{!-- </form> --}}
+
+    
       </div>
       
     </div>
@@ -95,7 +99,7 @@
   
 <script>
 
-  function Edit(idEle) {
+  function onEdit(idEle) {
     console.log('------------ idEle --------------', idEle );
     // find one idEle => data => fill vào element
    let inputs = document.querySelectorAll('input');
@@ -104,7 +108,9 @@
   
   {{#each rows}}
  var a = `{{this.id}}`;
-  if(a==idEle) {
+ var b = parseInt(a);
+ 
+  if(b==idEle) {
         idHs.innerText = idEle;
         inputs[1].value = `{{this.firstName}}`;
         inputs[2].value = `{{this.lastName}}`;
@@ -115,75 +121,57 @@
   {{/each}}
 
       }
-  function saveChanges(){
+async function saveChanges(){
         let idHs = document.getElementById('idHs').innerText;
         let inputs = document.querySelectorAll('input');     
-        let tds = document.querySelectorAll(`td[id=a${idHs}]`); 
+         
         let th = document.querySelector(`th[id=a${idHs}]`); 
           
-  {{#each rows}}
-  var b = `{{this.id}}`
-  if(b == idHs) {
-        
-        tds[0].innerText = inputs[1].value;
-        tds[1].innerText = inputs[2].value;
-        tds[2].innerText = inputs[3].value;
-        tds[3].innerText = inputs[4].value;
-     
-  }
-  {{/each}}
 
-
-
-      }
-  
- 
-</script>
-<script>
-  
-   async function  updateUser(idHs) {
-        // lấy id từ onEdit ??
-        // update
-        console.log(idHs);
-   let tds = document.querySelectorAll(`td[id=a${idHs}]`); 
    let url = `http://localhost:2000/edituser/${idHs}`;
    let user ={
    
-    firstName:tds[0].innerText,  
-    lastName:tds[1].innerText,
-    email:tds[2].innerText,
-    phone:tds[3].innerText
+    firstName:inputs[1].value,  
+    lastName:inputs[2].value,
+    email:inputs[3].value,
+    phone:inputs[4].value
   
    }
-       
-       const res = await fetch(url,{
-         method: 'PUT',
+    const isStatus =  fetch(url,{
+        method: 'PUT',
         headers: {
        'Content-Type': 'application/json',
       },
           body: JSON.stringify(user)
-         },
-     
-       
-       )
-  
+      }).then((res) =>{
+     if(res.status ===200){
+ updateUser(idHs,user)
+     }    
+   })
+     {{!-- if(isStatus==true){ 
+       updateUser(idHs,user)
+     } --}}
+ 
    }
-  
-</script>
-<script>
-
-   async function deleteUser(idHs){
-     let url = `http://localhost:2000/deleteuser/${idHs}`;
-     const res = await fetch(url,{
-          method: 'DELETE'
-     });
-     
-     let tbody = document.querySelector('tbody');
+   function updateUser(idHs,user){
      let tr = document.querySelector(`tr[id=a${idHs}]`);
-     console.log('1',tbody,tr)
-     tbody.removeChild(tr);
-      console.log('1',tbody,tr)
-   }
-
+     let th = document.querySelector(`th[id=a${idHs}]`);
+     let td = document.querySelectorAll(`td[id=a${idHs}]`);
+     {{#each rows}}
+          var a = `{{this.id}}`;
+ var b = parseInt(a);
+ 
+  if(b==idHs) {
+        
+        th.innerText =idHs;
+        td[0].innerText = user.firstName;
+        td[1].innerText = user.lastName;
+        td[2].innerText= user.email;
+        td[3].innerText = user.phone;
+       
+  }
+   {{/each}}
+   
+   }  
 </script>
-  
+

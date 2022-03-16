@@ -1,4 +1,6 @@
 const mysql = require('mysql');
+
+
 const db = require('../models/index');
 const User = require('../models/user')
 const { Sequelize, QueryTypes } = require('sequelize');
@@ -48,7 +50,7 @@ exports.view = async (req, res) => {
 
 // Find User by Search
 exports.find = async (req, res) => {
-  let searchTerm = req.body.search;
+ 
   // User the connection
   // connection.query('SELECT * FROM user WHERE first_name LIKE ? OR last_name LIKE ?', ['%' + searchTerm + '%', '%' + searchTerm + '%'], (err, rows) => {
   //   if (!err) {
@@ -59,8 +61,11 @@ exports.find = async (req, res) => {
   //   console.log('The data from user table: \n', rows);
   // });
   try {
-    let rows = await db.User.findAll({});
-    res.render('home');
+    const firstName = req.body.search;
+    console.log(firstName)
+    let rows = await db.User.findOne({where:{firstName:firstName}},{raw:true});
+    console.log(rows);
+    res.render('home',{rows:rows});
   }
   catch (err) {
     console.log(err)
@@ -85,15 +90,18 @@ exports.create = async (req, res) => {
   //   }
   //   console.log('The data from user table: \n', rows);
   // });
-  const{firstName,lastName,email,phone} = req.body;
-  
-  const user = await db.User.create({firstName,lastName,email,phone})
+  const firstName= req.body.firstName;
+  const lastName= req.body.lastName;
+  const email= req.body.email;
+  const phone= req.body.phone;
+  const id = req.params.id;
+  const user = await db.User.create({firstName:firstName,lastName:lastName,email:email,phone:phone},{where:{id:id}})
   res.redirect('/')
 }
 
 
 // Edit user
-exports.edit = (req, res) => {
+exports.edit = async (req, res) => {
   // const id = req.params.id;
   // const rows = await db.User.update({where:{id:id}});
 
@@ -106,6 +114,10 @@ exports.edit = (req, res) => {
   //   }
   //   console.log('The data from user table: \n', rows);
   // });
+  const id = req.params.id;
+  const rows = await db.User.findOne({raw:true},{where:{id:id}});
+  console.log(rows)
+  res.render('edit-user', { rows });
 }
 
 
@@ -133,18 +145,22 @@ exports.update = async (req, res) => {
   //   console.log('The data from user table: \n', rows);
   // });
   // const id = req.params.idHs;
-  const {firstName,lastName,email,phone} = req.body;
+  const firstName= req.body.firstName;
+  const lastName= req.body.lastName;
+  const email= req.body.email;
+  const phone= req.body.phone;
   const id = req.params.id;
   console.log(id);
   console.log({firstName,lastName,email,phone})
-  const rows = await db.User.update({firstName,lastName,email,phone},{where:{id:id}});
-//  res.render('home',{rows})
-  
+  await db.User.update({firstName:firstName,lastName:lastName,email:email,phone:phone},{where:{id:id}});
+  const rows = await db.User.findAll({})
+  res.render('home',{rows:rows})
+  // res.json({redirected:true})
 }
 
 // Delete User
 exports.delete = async (req, res) => {
-
+console.log("aaaaaaaa");
   // Delete a record
 
   // User the connection
@@ -171,9 +187,10 @@ exports.delete = async (req, res) => {
   //   console.log('The data from beer table are: \n', rows);
   // });
   const id = req.params.id;
-  
+  console.log('The data from user table')
   const rows = await db.User.destroy({where:{id:id}});
   res.redirect('/')
+
 
 }
 
