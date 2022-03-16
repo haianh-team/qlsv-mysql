@@ -1,34 +1,29 @@
 {
-  "name": "abc",
+  "name": "nodejs-usermanagement",
   "version": "1.0.0",
+  "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon source/index",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
   },
-  "author": "haianhle <khoaianh01@gmail.com>",
+  "author": "",
   "license": "ISC",
   "dependencies": {
-    "dot-env": "^0.0.1",
-    "dotenv": "^16.0.0",
-    "ejs-mate": "^3.0.0",
-    "express": "^4.17.3",
+    "@handlebars/allow-prototype-access": "^1.0.5",
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-handlebars": "^6.0.3",
+    "express-pjax": "^0.0.1",
     "method-override": "^3.0.0",
+    "mysql": "^2.18.1",
     "mysql2": "^2.3.3",
-    "node": "^17.5.0",
+    "sequelize": "^6.17.0"
+  },
+  "devDependencies": {
+    "handlebars": "^4.5.0",
     "nodemon": "^2.0.15",
-    "package.json": "^2.0.1",
-    "sequelize": "^6.17.0",
-    "sequelize-cli": "^6.4.1",
-    "sqlite3": "^5.0.2"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/haianh-team/qlsv-mysql.git"
-  },
-  "bugs": {
-    "url": "https://github.com/haianh-team/qlsv-mysql/issues"
-  },
-  "homepage": "https://github.com/haianh-team/qlsv-mysql#readme",
-  "description": ""
+    "sequelize-cli": "^6.4.1"
+  }
 }

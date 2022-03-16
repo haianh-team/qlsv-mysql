@@ -1,0 +1,177 @@
+ {{#if removedUser}}
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+  User has been removed.
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{{/if}} 
+
+<div class="row">
+  <div class="col-6">
+    <h1>Users</h1>
+  </div>
+  <div class="col-6 d-flex justify-content-end">
+    <a href="/adduser" type="button" class="btn btn-primary align-self-center">+ add user</a>
+     {{!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" onclick="addUser()">addUser</button> --}}
+  </div>
+</div>
+
+<table class="table table-bordered">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">First Name</th>
+      <th scope="col">Last Name</th>
+      <th scope="col">Email</th>
+      <th scope="col">Phone</th>
+      <th scope="col" class="text-end">Action</th>
+    </tr>
+  </thead>
+  <tbody >
+ 
+    {{#each rows}}
+    <tr id="a{{this.id}}">
+      <th scope="row" id="a{{this.id}}">{{this.id}}</th>
+      <td id="a{{this.id}}">{{this.firstName}}</td>
+      <td id="a{{this.id}}">{{this.lastName}}</td>
+      <td id="a{{this.id}}">{{this.email}}</td>
+      <td id="a{{this.id}}">{{this.phone}}</td>
+      <td class="text-end">
+  
+      <button  type="button"class="btn btn-primary" data-toggle="modal" data-target="#myModal" onclick="onEdit({{this.id}})"> edit </button>
+      <form action="/delete/{{this.id}}?_method=DELETE" method="POST">
+       <button type="submit" class="btn btn-light btn-small">delete</button>
+   </form>
+   
+        
+      </td>
+    </tr>
+    {{/each}}
+
+  </tbody>
+</table>
+ 
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+ 
+ <div class="form-group">số thứ tự của hs: <p id="idHs"></p></div>
+  <div class="form-group">
+    <label for="exampleInputEmail1">First name</label>
+    <input type="text" class="form-control"  id="first_name" aria-describedby="emailHelp" value="" placeholder="First name">
+    <small id="emailHelp" class="form-text text-muted">Well never share your email with anyone else.</small>
+  </div>
+   <div class="form-group">
+    <label for="exampleInputEmail1">last name</label>
+    <input type="text" class="form-control" id="last_name" aria-describedby="emailHelp" value="" placeholder="last name">
+    <small id="emailHelp" class="form-text text-muted">Well never share your email with anyone else.</small>
+  </div>
+  <div class="form-group">
+    <label for="exampleInputEmail1">Email</label>
+    <input type="email" class="form-control"  id="email" aria-describedby="emailHelp" value="" placeholder="Enter email">
+    <small id="emailHelp" class="form-text text-muted">Well never share your email with anyone else.</small>
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Phone</label>
+    <input type="text" class="form-control" id="phone" value="" placeholder="Phone">
+  </div>
+
+<div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" data-dismiss="modal" onclick="saveChanges()" >Save changes</button>
+        
+      </div>
+
+    
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+  
+<script>
+
+  function onEdit(idEle) {
+    console.log('------------ idEle --------------', idEle );
+    // find one idEle => data => fill vào element
+   let inputs = document.querySelectorAll('input');
+   let idHs = document.getElementById('idHs');
+   console.log(inputs.length)
+  
+  {{#each rows}}
+ var a = `{{this.id}}`;
+ var b = parseInt(a);
+ 
+  if(b==idEle) {
+        idHs.innerText = idEle;
+        inputs[1].value = `{{this.firstName}}`;
+        inputs[2].value = `{{this.lastName}}`;
+        inputs[3].value = `{{this.email}}`;
+        inputs[4].value = `{{this.phone}}`
+  }
+  
+  {{/each}}
+
+      }
+async function saveChanges(){
+        let idHs = document.getElementById('idHs').innerText;
+        let inputs = document.querySelectorAll('input');     
+         
+        let th = document.querySelector(`th[id=a${idHs}]`); 
+          
+
+   let url = `http://localhost:2000/edituser/${idHs}`;
+   let user ={
+   
+    firstName:inputs[1].value,  
+    lastName:inputs[2].value,
+    email:inputs[3].value,
+    phone:inputs[4].value
+  
+   }
+    const isStatus =  fetch(url,{
+        method: 'PUT',
+        headers: {
+       'Content-Type': 'application/json',
+      },
+          body: JSON.stringify(user)
+      }).then((res) =>{
+     if(res.status ===200){
+ updateUser(idHs,user)
+     }    
+   })
+     {{!-- if(isStatus==true){ 
+       updateUser(idHs,user)
+     } --}}
+ 
+   }
+   function updateUser(idHs,user){
+     let tr = document.querySelector(`tr[id=a${idHs}]`);
+     let th = document.querySelector(`th[id=a${idHs}]`);
+     let td = document.querySelectorAll(`td[id=a${idHs}]`);
+     {{#each rows}}
+          var a = `{{this.id}}`;
+ var b = parseInt(a);
+ 
+  if(b==idHs) {
+        
+        th.innerText =idHs;
+        td[0].innerText = user.firstName;
+        td[1].innerText = user.lastName;
+        td[2].innerText= user.email;
+        td[3].innerText = user.phone;
+       
+  }
+   {{/each}}
+   
+   }  
+</script>
+

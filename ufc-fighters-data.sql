@@ -1,0 +1,20 @@
+INSERT INTO `Users` 
+(`id`, `firstname`,  `lastname`,    `email`,                 `phone`,         `comments`, `status`, `createdAt`,`updatedAt`) VALUES
+(1, 'Amanda',      'Nunes',        'anunes@ufc.com',        '01234578910',      'abc',          'active',  '2022-03-15 00:00:00','2022-03-15 00:00'   ),
+(2, 'Alexander',   'Volkanovski',  'avolkanovski@ufc.com',  '01234578910',      'abc',       'active',  '2022-03-15 00:00:00','2022-03-15 00:00:00'  ),
+(3, 'Khabib',      'Nurmagomedov', 'knurmagomedov@ufc.com', '01234578910',      'abc',       'active',  '2022-03-15 00:00:00','2022-03-15 00:00:00'  ),
+(4, 'Kamaru',      'Usman',        'kusman@ufc.com',        '01234578910',      'abc',       'active',  '2022-03-15 00:00:00','2022-03-15 00:00:00'  ),
+(5, 'Israel',      'Adesanya',     'iadesanya@ufc.com',     '01234578910',      'abc',       'active',  '2022-03-15 00:00:00','2022-03-15 00:00:00'  ),
+(6, 'Henry',       'Cejudo',       'hcejudo@ufc.com',       '01234578910',      'abc',       'active',  '2022-03-15 00:00:00','2022-03-15 00:00:00'  ),
+(7, 'Valentina',   'Shevchenko',   'vshevchenko@ufc.com',   '01234578910',      'abc',       'active',  '2022-03-15 00:00:00','2022-03-15 00:00:00'  ),
+(8, 'Tyron',       'Woodley',      'twoodley@ufc.com',      '01234578910',      'abc',       'active',  '2022-03-15 00:00:00','2022-03-15 00:00:00'  ),
+(9, 'Rose',        'Namajunas ',   'rnamajunas@ufc.com',    '01234578910',      'abc',       'active',  '2022-03-15 00:00:00','2022-03-15 00:00:00'  ),
+(10, 'Tony',        'Ferguson ',    'tferguson@ufc.com',     '01234678910',     'abc',        'active',  '2022-03-15 00:00:00','2022-03-15 00:00:0'   ),
+(11, 'Jorge',       'Masvidal ',    'jmasvidal@ufc.com',     '01234678910',     'abc',        'active',  '2022-03-15 00:00:00','2022-03-15 00:00:0'   ),
+(12, 'Nate',        'Diaz ',        'ndiaz@ufc.com',         '01234678910',     'abc',        'active',  '2022-03-15 00:00:00','2022-03-15 00:00:0'   ),
+(13, 'Conor',       'McGregor ',    'cmcGregor@ufc.com',     '01234678910',     'abc',        'active',  '2022-03-15 00:00:00','2022-03-15 00:00:0'   ),
+(14, 'Cris',        'Cyborg ',      'ccyborg@ufc.com',       '01234678910',     'abc',        'active',  '2022-03-15 00:00:00','2022-03-15 00:00:0'   ),
+(15, 'Tecia',       'Torres ',      'ttorres@ufc.com',       '01234678910',     'abc',        'active',  '2022-03-15 00:00:00','2022-03-15 00:00:0'   ),
+(16, 'Ronda',       'Rousey ',      'rrousey@ufc.com',       '01234678910',     'abc',        'active',  '2022-03-15 00:00:00','2022-03-15 00:00:0'   ),
+(17, 'Holly',       'Holm ',        'hholm@ufc.com',         '01234678910',     'abc',        'active',  '2022-03-15 00:00:00','2022-03-15 00:00:0'   ),
+(18, 'Joanna',      'Jedrzejczyk ', 'jjedrzejczyk@ufc.com',  '01234678910',     'abc',        'active',  '2022-03-15 00:00:00','2022-03-15 00:00:0'   )
