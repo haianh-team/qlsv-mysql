@@ -1,9 +1,9 @@
-{{#if removedUser}}
+{{!-- {{#if removedUser}}
 <div class="alert alert-success alert-dismissible fade show" role="alert">
   User has been removed.
   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
-{{/if}}
+{{/if}} --}}
 
 <div class="row">
   <div class="col-6">
@@ -11,6 +11,7 @@
   </div>
   <div class="col-6 d-flex justify-content-end">
     <a href="/adduser" type="button" class="btn btn-primary align-self-center">+ add user</a>
+     {{!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" onclick="addUser()">addUser</button> --}}
   </div>
 </div>
 
@@ -25,23 +26,164 @@
       <th scope="col" class="text-end">Action</th>
     </tr>
   </thead>
-  <tbody>
-
+  <tbody >
+ 
     {{#each rows}}
-    <tr>
-      <th scope="row">{{this.id}}</th>
-      <td>{{this.first_name}}</td>
-      <td>{{this.last_name}}</td>
-      <td>{{this.email}}</td>
-      <td>{{this.phone}}</td>
+    <tr id="a{{this.id}}">
+      <th scope="row" id="a{{this.id}}">{{this.id}}</th>
+      <td id="a{{this.id}}">{{this.firstName}}</td>
+      <td id="a{{this.id}}">{{this.lastName}}</td>
+      <td id="a{{this.id}}">{{this.email}}</td>
+      <td id="a{{this.id}}">{{this.phone}}</td>
       <td class="text-end">
-        <a href="/viewuser/{{this.id}}" type="button" class="btn btn-light btn-small"><i class="bi bi-eye"></i> View</a>
-        <a href="/edituser/{{this.id}}" type="button" class="btn btn-light btn-small"><i class="bi bi-pencil"></i>
-          Edit</a>
-        <a href="/{{this.id}}" type="button" class="btn btn-light btn-small"><i class="bi bi-person-x"></i> Delete</a>
+      <button  type="button"class="btn btn-primary" data-toggle="modal" data-target="#myModal" onclick="Edit({{this.id}})"> edit </button>
+      <button type="button" class="btn btn-primary" onclick="updateUser({{this.id}})">updateUser</button>
+        <button  type="button" class="btn btn-light btn-small" onclick="deleteUser({{this.id}})"><i class="bi bi-person-x"></i> Delete</button>
       </td>
     </tr>
     {{/each}}
 
   </tbody>
 </table>
+ 
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        {{!-- action="/edit/{{this.id}}_?method=PUT" method="POST" --}}
+       {{!-- <form > --}}
+ <div class="form-group">số thứ tự của hs: <p id="idHs"></p></div>
+  <div class="form-group">
+    <label for="exampleInputEmail1">First name</label>
+    <input type="text" class="form-control"  id="first_name" aria-describedby="emailHelp" value="" placeholder="First name">
+    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+  </div>
+   <div class="form-group">
+    <label for="exampleInputEmail1">last name</label>
+    <input type="text" class="form-control" id="last_name" aria-describedby="emailHelp" value="" placeholder="last name">
+    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+  </div>
+  <div class="form-group">
+    <label for="exampleInputEmail1">Email</label>
+    <input type="email" class="form-control" id="email" aria-describedby="emailHelp" value="" placeholder="Enter email">
+    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Phone</label>
+    <input type="text" class="form-control" id="phone" value="" placeholder="Phone">
+  </div>
+
+<div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="saveChanges()">Save changes</button>
+        
+      </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+{{!-- </form> --}}
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+  
+<script>
+
+  function Edit(idEle) {
+    console.log('------------ idEle --------------', idEle );
+    // find one idEle => data => fill vào element
+   let inputs = document.querySelectorAll('input');
+   let idHs = document.getElementById('idHs');
+   console.log(inputs.length)
+  
+  {{#each rows}}
+ var a = `{{this.id}}`;
+  if(a==idEle) {
+        idHs.innerText = idEle;
+        inputs[1].value = `{{this.firstName}}`;
+        inputs[2].value = `{{this.lastName}}`;
+        inputs[3].value = `{{this.email}}`;
+        inputs[4].value = `{{this.phone}}`
+  }
+  
+  {{/each}}
+
+      }
+  function saveChanges(){
+        let idHs = document.getElementById('idHs').innerText;
+        let inputs = document.querySelectorAll('input');     
+        let tds = document.querySelectorAll(`td[id=a${idHs}]`); 
+        let th = document.querySelector(`th[id=a${idHs}]`); 
+          
+  {{#each rows}}
+  var b = `{{this.id}}`
+  if(b == idHs) {
+        
+        tds[0].innerText = inputs[1].value;
+        tds[1].innerText = inputs[2].value;
+        tds[2].innerText = inputs[3].value;
+        tds[3].innerText = inputs[4].value;
+     
+  }
+  {{/each}}
+
+
+
+      }
+  
+ 
+</script>
+<script>
+  
+   async function  updateUser(idHs) {
+        // lấy id từ onEdit ??
+        // update
+        console.log(idHs);
+   let tds = document.querySelectorAll(`td[id=a${idHs}]`); 
+   let url = `http://localhost:2000/edituser/${idHs}`;
+   let user ={
+   
+    firstName:tds[0].innerText,  
+    lastName:tds[1].innerText,
+    email:tds[2].innerText,
+    phone:tds[3].innerText
+  
+   }
+       
+       const res = await fetch(url,{
+         method: 'PUT',
+        headers: {
+       'Content-Type': 'application/json',
+      },
+          body: JSON.stringify(user)
+         },
+     
+       
+       )
+  
+   }
+  
+</script>
+<script>
+
+   async function deleteUser(idHs){
+     let url = `http://localhost:2000/deleteuser/${idHs}`;
+     const res = await fetch(url,{
+          method: 'DELETE'
+     });
+     
+     let tbody = document.querySelector('tbody');
+     let tr = document.querySelector(`tr[id=a${idHs}]`);
+     console.log('1',tbody,tr)
+     tbody.removeChild(tr);
+      console.log('1',tbody,tr)
+   }
+
+</script>
+  

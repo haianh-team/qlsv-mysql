@@ -1,40 +1,70 @@
 const mysql = require('mysql');
-
+const db = require('../models/index');
+const User = require('../models/user')
+const { Sequelize, QueryTypes } = require('sequelize');
 // Connection Pool
-let connection = mysql.createConnection({
+// let connection = mysql.createConnection({
+//   host: process.env.DB_HOST,
+//   user: process.env.DB_USER,
+//   password: process.env.DB_PASS,
+//   database: process.env.DB_NAME
+// });
+const sequelize = new Sequelize( process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASS, {
   host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  database: process.env.DB_NAME
-});
-
-// View Users
-exports.view = (req, res) => {
-  // User the connection
-  connection.query('SELECT * FROM user WHERE status = "active"', (err, rows) => {
-    // When done with the connection, release it
-    if (!err) {
-      let removedUser = req.query.removed;
-      res.render('home', { rows, removedUser });
-    } else {
-      console.log(err);
+  dialect: 'mysql',
+  Port: 3306
+})
+const connect1 = async () =>{
+  try {
+      await sequelize.authenticate();
+      console.log('Connection has been established successfully.');
+    } catch (error) {
+      console.error('Unable to connect to the database:', error);
     }
-    console.log('The data from user table: \n', rows);
-  });
+}
+connect1();
+// async function main(){
+//   await sequelize.sync({force: true});
+// }
+// main()
+// View Users
+exports.view = async (req, res) => {
+
+  // User the connection
+  
+  try {
+     await db.User.findAll({raw:true})
+    .then(rows =>{
+      
+      res.render('home', {rows:rows});
+    });
+ 
+    
+  }
+  catch (err) {
+    console.log(err)
+  }
 }
 
 // Find User by Search
-exports.find = (req, res) => {
+exports.find = async (req, res) => {
   let searchTerm = req.body.search;
   // User the connection
-  connection.query('SELECT * FROM user WHERE first_name LIKE ? OR last_name LIKE ?', ['%' + searchTerm + '%', '%' + searchTerm + '%'], (err, rows) => {
-    if (!err) {
-      res.render('home', { rows });
-    } else {
-      console.log(err);
-    }
-    console.log('The data from user table: \n', rows);
-  });
+  // connection.query('SELECT * FROM user WHERE first_name LIKE ? OR last_name LIKE ?', ['%' + searchTerm + '%', '%' + searchTerm + '%'], (err, rows) => {
+  //   if (!err) {
+  //     res.render('home', { rows });
+  //   } else {
+  //     console.log(err);
+  //   }
+  //   console.log('The data from user table: \n', rows);
+  // });
+  try {
+    let rows = await db.User.findAll({});
+    res.render('home');
+  }
+  catch (err) {
+    console.log(err)
+  }
 }
 
 exports.form = (req, res) => {
@@ -42,63 +72,78 @@ exports.form = (req, res) => {
 }
 
 // Add new user
-exports.create = (req, res) => {
-  const { first_name, last_name, email, phone, comments } = req.body;
-  let searchTerm = req.body.search;
+exports.create = async (req, res) => {
+  // const { first_name, last_name, email, phone, comments } = req.body;
+  // let searchTerm = req.body.search;
 
   // User the connection
-  connection.query('INSERT INTO user SET first_name = ?, last_name = ?, email = ?, phone = ?, comments = ?', [first_name, last_name, email, phone, comments], (err, rows) => {
-    if (!err) {
-      res.render('add-user', { alert: 'User added successfully.' });
-    } else {
-      console.log(err);
-    }
-    console.log('The data from user table: \n', rows);
-  });
+  // connection.query('INSERT INTO user SET first_name = ?, last_name = ?, email = ?, phone = ?, comments = ?', [first_name, last_name, email, phone, comments], (err, rows) => {
+  //   if (!err) {
+  //     res.render('add-user', { alert: 'User added successfully.' });
+  //   } else {
+  //     console.log(err);
+  //   }
+  //   console.log('The data from user table: \n', rows);
+  // });
+  const{firstName,lastName,email,phone} = req.body;
+  
+  const user = await db.User.create({firstName,lastName,email,phone})
+  res.redirect('/')
 }
 
 
 // Edit user
 exports.edit = (req, res) => {
+  // const id = req.params.id;
+  // const rows = await db.User.update({where:{id:id}});
+
   // User the connection
-  connection.query('SELECT * FROM user WHERE id = ?', [req.params.id], (err, rows) => {
-    if (!err) {
-      res.render('edit-user', { rows });
-    } else {
-      console.log(err);
-    }
-    console.log('The data from user table: \n', rows);
-  });
+  // connection.query('SELECT * FROM user WHERE id = ?', [req.params.id], (err, rows) => {
+  //   if (!err) {
+  //     res.render('edit-user', { rows });
+  //   } else {
+  //     console.log(err);
+  //   }
+  //   console.log('The data from user table: \n', rows);
+  // });
 }
 
 
 // Update User
-exports.update = (req, res) => {
-  const { first_name, last_name, email, phone, comments } = req.body;
+exports.update = async (req, res) => {
+  // const { first_name, last_name, email, phone, comments } = req.body;
   // User the connection
-  connection.query('UPDATE user SET first_name = ?, last_name = ?, email = ?, phone = ?, comments = ? WHERE id = ?', [first_name, last_name, email, phone, comments, req.params.id], (err, rows) => {
+  // connection.query('UPDATE user SET first_name = ?, last_name = ?, email = ?, phone = ?, comments = ? WHERE id = ?', [first_name, last_name, email, phone, comments, req.params.id], (err, rows) => {
 
-    if (!err) {
-      // User the connection
-      connection.query('SELECT * FROM user WHERE id = ?', [req.params.id], (err, rows) => {
-        // When done with the connection, release it
+  //   if (!err) {
+  //     // User the connection
+  //     connection.query('SELECT * FROM user WHERE id = ?', [req.params.id], (err, rows) => {
+  //       // When done with the connection, release it
         
-        if (!err) {
-          res.render('edit-user', { rows, alert: `${first_name} has been updated.` });
-        } else {
-          console.log(err);
-        }
-        console.log('The data from user table: \n', rows);
-      });
-    } else {
-      console.log(err);
-    }
-    console.log('The data from user table: \n', rows);
-  });
+  //       if (!err) {
+  //         res.render('edit-user', { rows, alert: `${first_name} has been updated.` });
+  //       } else {
+  //         console.log(err);
+  //       }
+  //       console.log('The data from user table: \n', rows);
+  //     });
+  //   } else {
+  //     console.log(err);
+  //   }
+  //   console.log('The data from user table: \n', rows);
+  // });
+  // const id = req.params.idHs;
+  const {firstName,lastName,email,phone} = req.body;
+  const id = req.params.id;
+  console.log(id);
+  console.log({firstName,lastName,email,phone})
+  const rows = await db.User.update({firstName,lastName,email,phone},{where:{id:id}});
+//  res.render('home',{rows})
+  
 }
 
 // Delete User
-exports.delete = (req, res) => {
+exports.delete = async (req, res) => {
 
   // Delete a record
 
@@ -116,29 +161,19 @@ exports.delete = (req, res) => {
 
   // Hide a record
 
-  connection.query('UPDATE user SET status = ? WHERE id = ?', ['removed', req.params.id], (err, rows) => {
-    if (!err) {
-      let removedUser = encodeURIComponent('User successeflly removed.');
-      res.redirect('/?removed=' + removedUser);
-    } else {
-      console.log(err);
-    }
-    console.log('The data from beer table are: \n', rows);
-  });
+  // connection.query('UPDATE user SET status = ? WHERE id = ?', ['removed', req.params.id], (err, rows) => {
+  //   if (!err) {
+  //     let removedUser = encodeURIComponent('User successeflly removed.');
+  //     res.redirect('/?removed=' + removedUser);
+  //   } else {
+  //     console.log(err);
+  //   }
+  //   console.log('The data from beer table are: \n', rows);
+  // });
+  const id = req.params.id;
+  
+  const rows = await db.User.destroy({where:{id:id}});
+  res.redirect('/')
 
 }
 
-// View Users
-exports.viewall = (req, res) => {
-
-  // User the connection
-  connection.query('SELECT * FROM user WHERE id = ?', [req.params.id], (err, rows) => {
-    if (!err) {
-      res.render('view-user', { rows });
-    } else {
-      console.log(err);
-    }
-    console.log('The data from user table: \n', rows);
-  });
-
-}
