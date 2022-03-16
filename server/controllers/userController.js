@@ -4,6 +4,8 @@ const mysql = require('mysql');
 const db = require('../models/index');
 const User = require('../models/user')
 const { Sequelize, QueryTypes } = require('sequelize');
+
+const Op = Sequelize.Op;
 // Connection Pool
 // let connection = mysql.createConnection({
 //   host: process.env.DB_HOST,
@@ -63,7 +65,7 @@ exports.find = async (req, res) => {
   try {
     const firstName = req.body.search;
     console.log(firstName)
-    let rows = await db.User.findOne({where:{firstName:firstName}},{raw:true});
+    let rows = await db.User.findAll({where:{firstName:{[Op.like]:`%${firstName}%`}}});
     console.log(rows);
     res.render('home',{rows:rows});
   }
